@@ -1,5 +1,6 @@
 import json
 import os
+import platform
 import sys
 import time
 import random
@@ -8,9 +9,9 @@ from pendu_display import *
 
 list_word = "agneau aigle albatros alligator alpaga anaconda ane antilope araignee autruche babouin baleine belette beluga biche bison blaireau boa boeuf bonobo brebis buffle cachalot campagnol canard capucin capybara caribou carpe castor cerf chacal chameau chamois chat chaus cheval chevre chevreuil chien chimpanze chinchilla chouette cigogne cobaye coccinelle cochon coq coyote crabe crocodile cygne daim dauphin dinde dindon dingo drill dromadaire ecureuil elan elephant emeu epaulard escargot espadon eyra faisan faon faucon fennec fouine fourmilier furet gaufre gaur gazelle gelada genette gerbille gerboise gibbon girafe glouton gnou gorille grenouille grizzly grue guanaco guepard guigna hamster herisson hermine heron hibou hippocampe hippopotame hirondelle hyene ibis iguane impala isard isatis jaguar kangourou kiwi koala kodiak koudou lamantin lama lapin lemming lemurien leopard lerot lezard lievre lion loir lophophore lori loup loutre lycaon lynx manchot mandrill mangouste manul mara marmotte marsouin martre mesange morse mouette moufette mouflon mouton mulet mulot musaraigne muscardin naja nandou narval nasique nason noctule notou numbat ocelot octodon oie okapi once opossum oran ornithorynque orque orycterope oryx otarie ouistiti ours panda pangolin panthere paon paresseux pecaris pekan pelican perroquet phacochere phoque pie pika pingouin pipistrelle pogona poisson polatouche poney poule poulpe poussin puma putois python quetzal quiscale quokka ragondin rat ratufa renard requin rhesus rhinoceros roussette salamandre sanglier serpent serval singe souris suricate tamandua tamanoir tamarin tamia tapir tarsier tatou taupe taureau tigre tortue toucan trigonocephale unau urubu vache varan vautour veau vipere vison wallabi wapiti watussi wombat xerus yack zebre zebrule zebu zibeline zorille".split()
 
-def ft_clear_terminal_sleep(duration):
+def ft_clear_terminal_sleep(duration = 0):
     time.sleep(duration)
-    os.system('clear')
+    os.system('cls' if platform.system() == 'Windows' else 'clear')
 
 def ft_start_display():
     ft_clear_terminal_sleep(0)
@@ -27,7 +28,7 @@ def ft_start_display():
     input("Appuyer sur enter pour commencer le jeu : ")
 
 def ft_difficulty_level():
-    ft_clear_terminal_sleep(0)
+    ft_clear_terminal_sleep()
     print(header_display + difficulty_level_display)
     return (input("Entrer votre niveau de difficulté (1, 2, 3) : "))
 
@@ -42,7 +43,7 @@ def ft_letters_tried(i, all_letters_try):
             n -= 1
 
 def ft_game_display(i, word_to_find, number_tries, all_letters_try):
-    ft_clear_terminal_sleep(0)
+    ft_clear_terminal_sleep()
     print(header_display + pendu_display[i], end="")
     print("\tMot à trouver : " + " ".join(word_to_find), end="")
     print(f"\t\tnombre d'essaie restant {number_tries - i}")
@@ -51,7 +52,7 @@ def ft_game_display(i, word_to_find, number_tries, all_letters_try):
 def ft_game_over(word, all_letters_try):
     i = 0
     while i != 3:
-        ft_clear_terminal_sleep(0)
+        ft_clear_terminal_sleep()
         print(header_display + pendu_game_over_display[i], end="")
         print(f"\tLe mot à trouver été : {light_blue_color}" + word + f"{white_color}")
         ft_letters_tried(1, all_letters_try)
@@ -63,7 +64,7 @@ def ft_game_over(word, all_letters_try):
 def ft_win_game(i, word, all_letters_try):
     i = 0
     while i != 2:
-        ft_clear_terminal_sleep(0)
+        ft_clear_terminal_sleep()
         print(header_display + pendu_win_display[i], end="")
         print(f"\tLe mot à trouver été : {light_blue_color}" + word + f"{white_color}")
         ft_letters_tried(1, all_letters_try)
@@ -73,41 +74,60 @@ def ft_win_game(i, word, all_letters_try):
     print(win_display)
 
 def ft_retry():
-    retry = input("\n\tVoulez-vous rejouer ? (oui/non) :")
-    if retry == "oui" or retry == 'o':
-        ft_start_game(ft_difficulty_level())
-    else:
-        ft_clear_terminal_sleep(0)
-        print(end_display)
+    retry = 'oui'
+    while retry == 'oui' or retry == 'o':
+        retry = input("\n\tVoulez-vous rejouer ? (oui/non) :")
+        if retry == "oui" or retry == 'o':
+            ft_start_game(ft_difficulty_level())
+        else:
+            ft_clear_terminal_sleep()
+            print(end_display)
+
+def ft_stopwatch(time_start):
+    time_end = time.localtime()
+    if time_start.tm_min - time_end.tm_min <= -3:
+        print("temps fini")
+        return (0)
+
+def ft_get_valid_input(i, word_to_find, number_tries, all_letters_try):
+    valid_letter = False
+    while not valid_letter:
+        letter_try = input("\nEntrer une lettre : ")
+        if letter_try in all_letters_try:
+            ft_game_display(i, word_to_find, number_tries, all_letters_try)
+            print(f"\n\n{emoji_warning}{yellow_color}   Lettre déjà essayé, veuillez en choisir une autre{white_color}")
+        elif not letter_try.isalpha() or len(letter_try) != 1:
+            ft_game_display(i, word_to_find, number_tries, all_letters_try)
+            print(f"\n\n{emoji_warning}{yellow_color}   Entrer seulement une lettre{white_color}")
+        else:
+            valid_letter = True
+    return (letter_try)
 
 def ft_start_game(difficulty_level):
-    ft_clear_terminal_sleep(0)
-    #word = list_word[random.randint(0,243)]
-    word = "rat"
+    word = list_word[random.randint(0,243)]
     word_to_find = []
     letter_try = None
     all_letters_try = []
     for letter in word:
         word_to_find.append('_')
     word_found = False
-    valid_letter = False
     find_letter = False
     number_tries = 8
+    if difficulty_level == '1':
+        word_to_find[0] = word[0]
+        word_to_find[len(word) - 1] = word[len(word) - 1]
+    if difficulty_level == '3':
+        time_start = time.localtime()
     i = 0
     while not word_found:
         ft_game_display(i, word_to_find, number_tries, all_letters_try)
+        if difficulty_level == '3':
+            time_end = time.localtime()
+            time_game_min = time_end.tm_min - time_start.tm_min
+            time_game_sec = time_end.tm_sec - time_start.tm_sec
+            print(f"\n\t\t\t\t\t\t\tTemps de jeu : {time_game_min}.{time_game_sec}min")
         print(word)
-        while not valid_letter:
-            letter_try = input("\nEntrer une lettre : ")
-            if letter_try in all_letters_try:
-                ft_game_display(i, word_to_find, number_tries, all_letters_try)
-                print(f"\n\n{emoji_warning}{yellow_color}   Lettre déjà essayé, veuillez en choisir une autre{white_color}")
-            elif not letter_try.isalpha() or len(letter_try) != 1:
-                ft_game_display(i, word_to_find, number_tries, all_letters_try)
-                print(f"\n\n{emoji_warning}{yellow_color}   Entrer seulement une lettre{white_color}")
-            else:
-                valid_letter = True
-        valid_letter = False
+        letter_try = ft_get_valid_input(i, word_to_find, number_tries, all_letters_try)
         all_letters_try.append(letter_try)
         i += 1
         for index, letter in enumerate(word):
@@ -123,8 +143,11 @@ def ft_start_game(difficulty_level):
         if number_tries - i == 0:
             ft_game_over(word, all_letters_try)
             break
-    
-#ft_start_display()
+        if difficulty_level == '3' and ft_stopwatch(time_start) == 0:
+            break
+        
+ft_start_display()
 difficulty_level = ft_difficulty_level()
+ft_clear_terminal_sleep()
 ft_start_game(difficulty_level)
 ft_retry()
