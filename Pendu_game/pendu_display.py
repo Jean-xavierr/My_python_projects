@@ -215,7 +215,7 @@ pendu_game_over_display = [f"""
    ,==========Y===
    ||  /      |
    || /       |
-   ||/       _O__  {red_color}Peut-être que tu auras plus de chance la prochaien fois{white_color}
+   ||/       _O__  {red_color}Peut-être que tu auras plus de chance la prochaine fois{white_color}
    ||        \|
    ||        /|
    ||

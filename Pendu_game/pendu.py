@@ -126,7 +126,7 @@ def ft_start_game(difficulty_level):
             time_game_min = time_end.tm_min - time_start.tm_min
             time_game_sec = time_end.tm_sec - time_start.tm_sec
             print(f"\n\t\t\t\t\t\t\tTemps de jeu : {time_game_min}.{time_game_sec}min")
-        print(word)
+        # print(word)
         letter_try = ft_get_valid_input(i, word_to_find, number_tries, all_letters_try)
         all_letters_try.append(letter_try)
         i += 1
