@@ -5,7 +5,7 @@ import sys
 import time
 import random
 import logging
-from pendu_display import * 
+from pendu_display import *
 
 list_word = "agneau aigle albatros alligator anaconda ane antilope araignee autruche babouin baleine belette beluga biche bison blaireau boa boeuf bonobo brebis buffle cachalot canard caribou carpe castor cerf chacal chameau chamois chat cheval chevre chevreuil chien chimpanze chinchilla chouette cigogne coccinelle cochon coq coyote crabe crocodile cygne daim dauphin dinde dindon dromadaire ecureuil elan elephant escargot espadon faisan faon faucon fennec fouine fourmilier furet gaufre gazelle girafe glouton gnou gorille grenouille grizzly guepard guigna hamster herisson hermine heron hibou hippocampe hippopotame hirondelle hyene iguane jaguar kangourou koala lamantin lama lapin lemurien leopard lezard lievre lion loir loup loutre lynx manchot mandrill mangouste mara marmotte marsouin martre mesange morse mouette moufette mouflon mouton mulet mulot musaraigne muscardin naja nandou narval noctule notou numbat ocelot octodon oie opossum oran ornithorynque orque orycterope otarie ouistiti ours panda pangolin panthere paon paresseux pecaris pekan pelican perroquet phacochere phoque pie pika pingouin pipistrelle pogona poisson polatouche poney poule poulpe poussin puma putois python quetzal ragondin rat renard requin rhinoceros roussette salamandre sanglier serpent serval singe souris suricate tamandua tamanoir tamarin tapir tarsier tatou taupe taureau tigre tortue toucan trigonocephale urubu vache varan vautour veau vipere vison wallabi wapiti watussi yack zebre zebrule zebu".split()
 
@@ -104,7 +104,7 @@ def ft_get_valid_input(i, word_to_find, number_tries, all_letters_try):
     return (letter_try)
 
 def ft_start_game(difficulty_level):
-    word = list_word[random.randint(0,243)]
+    word = list_word[random.randint(0,196)]
     word_to_find = []
     letter_try = None
     all_letters_try = []
