@@ -1,6 +1,6 @@
 # Pendu_Game 
 
-Pendu_Game is a program which reproduces the game Pendu in Python | Pendu_Game est un programme qui reproduit le jeu Pendu en Python :snake:
+Pendu_Game est un programme qui reproduit le jeu Pendu en Python | Pendu_Game is a program which reproduces the game Pendu in Python  :snake:
 
 
 ⚠️  _This program is developed for Unix OS (Mac OS, Linux, Debian ...), there is some error for Windows OS_
@@ -11,4 +11,6 @@ Si vous atteignez la limite des erreurs, vous avez __perdu__, si vous trouvez le
 
 
 __Screenshot of the game__
+
+
 <img align="center" src="screenshot00.png" alt="Screenshot of the game" />
