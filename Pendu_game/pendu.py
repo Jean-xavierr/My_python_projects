@@ -54,7 +54,7 @@ def ft_game_over(word, all_letters_try):
     while i != 3:
         ft_clear_terminal_sleep()
         print(header_display + pendu_game_over_display[i], end="")
-        print(f"\tLe mot à trouver été : {light_blue_color}" + word + f"{white_color}")
+        print(f"\tLe mot à trouver été : {LIGHT_BLUE_COLOR}" + word + f"{WHITE_COLOR}")
         ft_letters_tried(1, all_letters_try)
         sys.stdout.flush()
         time.sleep(2)
@@ -66,7 +66,7 @@ def ft_win_game(i, word, all_letters_try):
     while i != 2:
         ft_clear_terminal_sleep()
         print(header_display + pendu_win_display[i], end="")
-        print(f"\tLe mot à trouver été : {light_blue_color}" + word + f"{white_color}")
+        print(f"\tLe mot à trouver été : {LIGHT_BLUE_COLOR}" + word + f"{WHITE_COLOR}")
         ft_letters_tried(1, all_letters_try)
         sys.stdout.flush()
         time.sleep(1)
@@ -75,9 +75,9 @@ def ft_win_game(i, word, all_letters_try):
 
 def ft_retry():
     retry = 'oui'
-    while retry == 'oui' or retry == 'o':
+    while retry in ["oui", "o", "yes", "y",]:
         retry = input("\n\tVoulez-vous rejouer ? (oui/non) :")
-        if retry == "oui" or retry == 'o':
+        if retry == ["oui", "o", "yes", "y",]:
             ft_start_game(ft_difficulty_level())
         else:
             ft_clear_terminal_sleep()
@@ -95,10 +95,10 @@ def ft_get_valid_input(i, word_to_find, number_tries, all_letters_try):
         letter_try = input("\nEntrer une lettre : ")
         if letter_try in all_letters_try:
             ft_game_display(i, word_to_find, number_tries, all_letters_try)
-            print(f"\n\n{emoji_warning}{yellow_color}   Lettre déjà essayé, veuillez en choisir une autre{white_color}")
+            print(f"\n\n{EMOJI_WARNING}{YELLOW_COLOR}   Lettre déjà essayé, veuillez en choisir une autre{WHITE_COLOR}")
         elif not letter_try.isalpha() or len(letter_try) != 1:
             ft_game_display(i, word_to_find, number_tries, all_letters_try)
-            print(f"\n\n{emoji_warning}{yellow_color}   Entrer seulement une lettre{white_color}")
+            print(f"\n\n{EMOJI_WARNING}{YELLOW_COLOR}   Entrer seulement une lettre{WHITE_COLOR}")
         else:
             valid_letter = True
     return (letter_try)
@@ -145,9 +145,13 @@ def ft_start_game(difficulty_level):
             break
         if difficulty_level == '3' and ft_stopwatch(time_start) == 0:
             break
-        
-ft_start_display()
-difficulty_level = ft_difficulty_level()
-ft_clear_terminal_sleep()
-ft_start_game(difficulty_level)
-ft_retry()
+
+def main():
+    ft_start_display()
+    difficulty_level = ft_difficulty_level()
+    ft_clear_terminal_sleep()
+    ft_start_game(difficulty_level)
+    ft_retry()
+
+if __name__ == "__main__":
+    main()
