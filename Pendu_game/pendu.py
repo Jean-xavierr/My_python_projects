@@ -34,7 +34,7 @@ def ft_difficulty_level():
 
 def ft_letters_tried(i, all_letters_try):
     if i != 0:
-        print("Lettre essayé : ", end="")
+        print("Lettres essayé : ", end="")
         n = len(all_letters_try)
         for word in all_letters_try:
             print(word, end="")
@@ -54,7 +54,7 @@ def ft_game_over(word, all_letters_try):
     while i != 3:
         ft_clear_terminal_sleep()
         print(header_display + pendu_game_over_display[i], end="")
-        print(f"\tLe mot à trouver été : {LIGHT_BLUE_COLOR}" + word + f"{WHITE_COLOR}")
+        print(f"\tLe mot à trouver était : {LIGHT_BLUE_COLOR}" + word + f"{WHITE_COLOR}")
         ft_letters_tried(1, all_letters_try)
         sys.stdout.flush()
         time.sleep(2)
@@ -66,7 +66,7 @@ def ft_win_game(i, word, all_letters_try):
     while i != 2:
         ft_clear_terminal_sleep()
         print(header_display + pendu_win_display[i], end="")
-        print(f"\tLe mot à trouver été : {LIGHT_BLUE_COLOR}" + word + f"{WHITE_COLOR}")
+        print(f"\tLe mot à trouver était : {LIGHT_BLUE_COLOR}" + word + f"{WHITE_COLOR}")
         ft_letters_tried(1, all_letters_try)
         sys.stdout.flush()
         time.sleep(1)
