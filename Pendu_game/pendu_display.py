@@ -73,7 +73,7 @@ start_display = [f"""
    ||  /      |
    || /       |
    ||/        O    {LIGHT_BLUE_COLOR}Lisez plutôt les règles du jeu{WHITE_COLOR}
-   ||        /|\\       {LIGHT_BLUE_COLOR}Et détacher moi !{WHITE_COLOR}
+   ||        /|\\       {LIGHT_BLUE_COLOR}Et détachez moi !{WHITE_COLOR}
    ||        /|
    ||
   /||
@@ -96,7 +96,7 @@ difficulty_level_display = f"""
 
     {GREEN_COLOR}niveau 1{WHITE_COLOR}: Débutant vous avez le droit à la première et la dernière lettre du mot à deviner pour vous aider.
     {BLUE_COLOR}niveau 2{WHITE_COLOR}: Intermédiaire vous n'avez plus aucune lettre pour vous aider.
-    {RED_COLOR}niveau 3{WHITE_COLOR}: Expert vous n'avez plus aucune lettre pour vous aider et vous devez trouver le mot en moins de 3min !
+    {RED_COLOR}niveau 3{WHITE_COLOR}: Expert vous n'avez plus aucune lettre pour vous aider et vous devez trouver le mot en moins de 1min !
 """
 
 pendu_display = [f"""
@@ -294,7 +294,7 @@ end_display = f"""
  ||                                                               ||
  ||                                                               ||
  ||                                                               ||
- ||                  {WHITE_COLOR}Merci d'avoir jouer au Pendu                 {LIGHT_BLUE_COLOR}||
+ ||                  {WHITE_COLOR}Merci d'avoir joué au Pendu                 {LIGHT_BLUE_COLOR}||
  ||               {WHITE_COLOR}N'hésitez pas à me faire votre retour           {LIGHT_BLUE_COLOR}||
  ||                                                               ||
  ||                                                               ||

@@ -77,7 +77,7 @@ def ft_retry():
     retry = 'oui'
     while retry in ["oui", "o", "yes", "y",]:
         retry = input("\n\tVoulez-vous rejouer ? (oui/non) :")
-        if retry == ["oui", "o", "yes", "y",]:
+        if retry in ["oui", "o", "yes", "y",]:
             ft_start_game(ft_difficulty_level())
         else:
             ft_clear_terminal_sleep()
@@ -85,7 +85,7 @@ def ft_retry():
 
 def ft_stopwatch(time_start):
     time_end = time.localtime()
-    if time_start.tm_min - time_end.tm_min <= -3:
+    if time_start.tm_min - time_end.tm_min <= -1:
         print("temps fini")
         return (0)
 
