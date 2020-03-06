@@ -11,4 +11,6 @@ Si vous atteignez la limite des erreurs, vous avez __perdu__, si vous trouvez le
 
 
 __Screenshot of the game__
+
+
 <img align="center" src="screenshot00.png" alt="Screenshot of the game" />
