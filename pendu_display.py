@@ -294,7 +294,7 @@ end_display = f"""
  ||                                                               ||
  ||                                                               ||
  ||                                                               ||
- ||                  {WHITE_COLOR}Merci d'avoir joué au Pendu                 {LIGHT_BLUE_COLOR}||
+ ||                  {WHITE_COLOR}Merci d'avoir joué au Pendu                  {LIGHT_BLUE_COLOR}||
  ||               {WHITE_COLOR}N'hésitez pas à me faire votre retour           {LIGHT_BLUE_COLOR}||
  ||                                                               ||
  ||                                                               ||
