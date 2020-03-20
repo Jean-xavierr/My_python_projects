@@ -2,6 +2,7 @@ import pygame
 import random
 import sys
 import time
+import inspect
 from constantes import *
 
 class Snake(object):
@@ -11,6 +12,13 @@ class Snake(object):
         self.body_size = SIZE
         self.life = True
         self.score = 0
+
+    def debug_snake(self, apple):
+        print(inspect.cleandoc(f"""DEBUG MODE [{GREEN_COLOR}ACTIVE{WHITE_COLOR}]
+        {LIGHT_BLUE_COLOR}Snake position:{WHITE_COLOR} {snake.pos_snake}
+        {LIGHT_BLUE_COLOR}Apple position:{WHITE_COLOR} {apple.pos}
+        {LIGHT_BLUE_COLOR}Apple place:{WHITE_COLOR} {apple.place}
+        {LIGHT_BLUE_COLOR}Apple score:{WHITE_COLOR} {snake.score}"""))
 
     def get_event(self, direction):
         for event in pygame.event.get():
@@ -31,26 +39,22 @@ class Snake(object):
         return direction
 
     def move(self, direction):
-        if snake.pos_snake[0] < 10 or snake.pos_snake[0] > SCREEN_RESOLUTION_X - 20 \
-            or snake.pos_snake[1] < 10 or snake.pos_snake[1] > SCREEN_RESOLUTION_Y - 20:
-                time.sleep(50)
+        if snake.pos_snake[0] < GAME_WINDOW_POSX or snake.pos_snake[0] > GAME_WINDOW_POSX_MAX - 2\
+            or snake.pos_snake[1] < GAME_WINDOW_POSY or snake.pos_snake[1] > GAME_WINDOW_POSY_MAX - 4:
+                time.sleep(3)
                 sys.exit()
         if direction == "UP":
-            snake.pos_snake[1] -= CELLULE_SIZE
+            snake.pos_snake[1] -= CELL_SIZE
         elif direction == "DOWN":
-            snake.pos_snake[1] += CELLULE_SIZE
+            snake.pos_snake[1] += CELL_SIZE
         elif direction == "RIGHT":
-            snake.pos_snake[0] += CELLULE_SIZE
+            snake.pos_snake[0] += CELL_SIZE
         elif direction == "LEFT":
-            snake.pos_snake[0] -= CELLULE_SIZE
+            snake.pos_snake[0] -= CELL_SIZE
         if direction == "STOP":
             snake.pos_snake = snake.pos_snake
     
     def eaten_apple(self, apple):
-        print(f"print apple pos {apple.pos}")
-        print(f"print snake pos {snake.pos_snake}")
-        print(f"place apple {apple.place}")
-        print(f"score {snake.score}")
         if snake.pos_snake[0] >= apple.pos[0] - 10 and snake.pos_snake[0] <= apple.pos[0] + 10 \
             and snake.pos_snake[1] >= apple.pos[1] - 10 and snake.pos_snake[1] <= apple.pos[1] + 10:
             snake.score += apple.score
@@ -62,33 +66,40 @@ class Game(object):
     def __init__ (self):
         pygame.display.set_caption(GAME_TITLE)
         pygame.display.set_icon(APP_PICTURE)
+        self.fps = pygame.time.Clock()
+
+    def debug_window(self):
+        print(inspect.cleandoc(f"""DEBUG MODE [{GREEN_COLOR}ACTIVE{WHITE_COLOR}]
+        {LIGHT_BLUE_COLOR}Resolution:{WHITE_COLOR} {SCREEN_RESOLUTION_X}:{SCREEN_RESOLUTION_Y}
+        {LIGHT_BLUE_COLOR}Game_Grid:{WHITE_COLOR} {GAME_GRID}"""))
 
     def init_WINDOW(self, apple):
-        WINDOW.fill(BLACK_RGB)
+        self.draw_game(apple)
         if GAME_GRID:
-            self.game_grid()
-        self.draw_snake_apple(apple)
+            self.draw_game_grid()
+        if DEBUG:
+            snake.debug_snake(apple)
         pygame.display.flip()
-    
-    def game_grid(self):
-        for x in range(CELLULE_SIZE, (SCREEN_RESOLUTION_X), CELLULE_SIZE):
-            pygame.draw.line(WINDOW, (112,128,144), (x, CELLULE_SIZE), [x, SCREEN_RESOLUTION_Y - 6])
-        for y in range(CELLULE_SIZE, (SCREEN_RESOLUTION_Y), CELLULE_SIZE):
-            pygame.draw.line(WINDOW, (112,128,144), (CELLULE_SIZE, y), [SCREEN_RESOLUTION_X - 6, y])
+        
+    def draw_game_grid(self):
+        for x in range(GAME_WINDOW_POSX, (GAME_WINDOW_LENGHT_X + GAME_WINDOW_POSX), CELL_SIZE):
+            pygame.draw.line(WINDOW, (SALTE_GREY_RGB), (x, GAME_WINDOW_POSY), [x, GAME_WINDOW_POSY_MAX])
+        for y in range(GAME_WINDOW_POSY, (GAME_WINDOW_LENGHT_Y + GAME_WINDOW_POSY), CELL_SIZE):
+            pygame.draw.line(WINDOW, (SALTE_GREY_RGB), (GAME_WINDOW_POSX, y), [GAME_WINDOW_POSX_MAX, y])
 
-    def draw_snake_apple(sefl, apple):
-        pygame.draw.rect(WINDOW, (WHITE_RGB), (0, 0, SCREEN_RESOLUTION_X, SCREEN_RESOLUTION_Y), 18)
+    def draw_game(sefl, apple):
+        WINDOW.fill(BLACK_RGB)
+        pygame.draw.rect(WINDOW, (WHITE_RGB), (GAME_WINDOW_POSX, GAME_WINDOW_POSY, GAME_WINDOW_LENGHT_X, GAME_WINDOW_LENGHT_Y), 2)
         pygame.draw.rect(WINDOW, (GREEN_RGB), (snake.pos_snake[0], snake.pos_snake[1], snake.body_size, snake.body_size))
         WINDOW.blit(apple.apple_picture, apple.pos)
 
     def start_game(self, snake):
-        fps = pygame.time.Clock()
         start_game = True
         direction = ""
         place = 0
         apple = Apple(place)
         while start_game:
-            fps.tick(FPS)
+            self.fps.tick(FPS)
             self.init_WINDOW(apple)
             direction = snake.get_event(direction)
             if snake.eaten_apple(apple) == True:
@@ -125,12 +136,12 @@ class Apple(object):
 
 if __name__ == "__main__":
     # if SCREEN_RESOLUTION_X % SIZE != 0 or SCREEN_RESOLUTION_Y % SIZE != 0:
-    #     print("Error: Size CELLULE")
+    #     print("Error: Size CELL_SIZE")
     #     sys.exit()
-    print(CELLULE_NB_X)
-    print(CELLULE_NB_Y)
-    # pygame.init()
-    # game = Game()
-    # snake = Snake([320, 240])
-    # game.start_game(snake)
-    # pygame.quit()
+    pygame.init()
+    game = Game()
+    if DEBUG:
+        game.debug_window()
+    snake = Snake([320, 240])
+    game.start_game(snake)
+    pygame.quit()
