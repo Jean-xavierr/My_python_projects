@@ -46,15 +46,25 @@ class Snake(object):
                 time.sleep(3)
                 sys.exit()
         if direction == "UP":
-            snake.pos_snake[1] -= CELL_SIZE
+            for i in range(0, len(snake.body_snake)):
+                snake.body_snake[i][1] -= CELL_SIZE
+            # snake.pos_snake[1] -= CELL_SIZE
         elif direction == "DOWN":
-            snake.pos_snake[1] += CELL_SIZE
+            for i in range(0, len(snake.body_snake)):
+                snake.body_snake[i][1] += CELL_SIZE
+            # snake.pos_snake[1] += CELL_SIZE
         elif direction == "RIGHT":
-            snake.pos_snake[0] += CELL_SIZE
+            for i in range(0, len(snake.body_snake)):
+                snake.body_snake[i][0] += CELL_SIZE
+            # snake.pos_snake[0] += CELL_SIZE
         elif direction == "LEFT":
-            snake.pos_snake[0] -= CELL_SIZE
+            for i in range(0, len(snake.body_snake)):
+                snake.body_snake[i][0] -= CELL_SIZE
+            # snake.pos_snake[0] -= CELL_SIZE
         if direction == "STOP":
-            snake.pos_snake = snake.pos_snake
+            for i in range(0, len(snake.body_snake)):
+                snake.body_snake[i] = snake.body_snake[i]
+            # snake.pos_snake = snake.pos_snake
     
     def eaten_apple(self, apple, direction):
         if snake.pos_snake[0] >= apple.pos[0] and snake.pos_snake[0] <= apple.pos[0] \
@@ -66,13 +76,13 @@ class Snake(object):
     
     def grow_up_snake(self, direction):
         if direction == "UP":
-            snake.body_snake.extend([[snake.pos_snake[0], snake.pos_snake[1] + 1]])
+            snake.body_snake.extend([[snake.pos_snake[0], snake.pos_snake[1] + SIZE]])
         elif direction == "DOWN":
-            snake.body_snake.extend([[snake.pos_snake[0], snake.pos_snake[1] - 1]])
+            snake.body_snake.extend([[snake.pos_snake[0], snake.pos_snake[1] - SIZE]])
         elif direction == "RIGHT":
-            snake.body_snake.extend([[snake.pos_snake[0] - 1, snake.pos_snake[1]]])
+            snake.body_snake.extend([[snake.pos_snake[0] - SIZE, snake.pos_snake[1]]])
         elif direction == "LEFT":
-            snake.body_snake.extend([[snake.pos_snake[0] + 1, snake.pos_snake[1]]])
+            snake.body_snake.extend([[snake.pos_snake[0] + SIZE, snake.pos_snake[1]]])
 
 class Game(object):
     def __init__ (self):
@@ -100,11 +110,13 @@ class Game(object):
         for y in range(GAME_WINDOW_POSY, (GAME_WINDOW_LENGHT_Y + GAME_WINDOW_POSY), CELL_SIZE):
             pygame.draw.line(WINDOW, (SALTE_GREY_RGB), (GAME_WINDOW_POSX, y), [GAME_WINDOW_POSX_MAX, y])
 
-    def draw_game(sefl, apple):
+    def draw_game(self, apple):
         pygame.draw.rect(WINDOW, (WHITE_RGB), (GAME_WINDOW_POSX, GAME_WINDOW_POSY, GAME_WINDOW_LENGHT_X, GAME_WINDOW_LENGHT_Y), 2)
-        for i in range(0, apple.place + 1):
-            # print(i)
-            # print(snake.body_snake)
+        for i in range(0, len(snake.body_snake)):
+            print(i)
+            print(snake.body_snake[i])
+            print(snake.body_snake[i][0])
+            print(snake.body_snake[i][1])
             pygame.draw.rect(WINDOW, (GREEN_RGB), (snake.body_snake[i][0], snake.body_snake[i][1], snake.body_size, snake.body_size))
         WINDOW.blit(apple.apple_picture, apple.pos)
 

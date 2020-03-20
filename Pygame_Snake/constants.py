@@ -7,7 +7,7 @@ by : https://github.com/Jean-xavierr
 import pygame
 
 # Game Constants | Window Constants
-FPS = 10
+FPS = 6
 DEBUG = True
 SCREEN_RESOLUTION_X = 640
 SCREEN_RESOLUTION_Y = 480
