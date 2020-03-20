@@ -3,7 +3,7 @@ import random
 import sys
 import time
 import inspect
-from constantes import *
+from constants import *
 
 class Snake(object):
     def __init__(self, pos_snake):
@@ -18,7 +18,9 @@ class Snake(object):
         {LIGHT_BLUE_COLOR}Snake position:{WHITE_COLOR} {snake.pos_snake}
         {LIGHT_BLUE_COLOR}Apple position:{WHITE_COLOR} {apple.pos}
         {LIGHT_BLUE_COLOR}Apple place:{WHITE_COLOR} {apple.place}
-        {LIGHT_BLUE_COLOR}Apple score:{WHITE_COLOR} {snake.score}"""))
+        {LIGHT_BLUE_COLOR}Apple score:{WHITE_COLOR} {snake.score}
+        {LIGHT_BLUE_COLOR}Snake body:{WHITE_COLOR} {snake.body_snake}"""))
+
 
     def get_event(self, direction):
         for event in pygame.event.get():
@@ -54,13 +56,23 @@ class Snake(object):
         if direction == "STOP":
             snake.pos_snake = snake.pos_snake
     
-    def eaten_apple(self, apple):
-        if snake.pos_snake[0] >= apple.pos[0] - 10 and snake.pos_snake[0] <= apple.pos[0] + 10 \
-            and snake.pos_snake[1] >= apple.pos[1] - 10 and snake.pos_snake[1] <= apple.pos[1] + 10:
+    def eaten_apple(self, apple, direction):
+        if snake.pos_snake[0] >= apple.pos[0] and snake.pos_snake[0] <= apple.pos[0] \
+            and snake.pos_snake[1] >= apple.pos[1] and snake.pos_snake[1] <= apple.pos[1]:
             snake.score += apple.score
+            self.grow_up_snake(direction)
             return True
         return False
-            
+    
+    def grow_up_snake(self, direction):
+        if direction == "UP":
+            snake.body_snake.extend([[snake.pos_snake[0], snake.pos_snake[1] + 1]])
+        elif direction == "DOWN":
+            snake.body_snake.extend([[snake.pos_snake[0], snake.pos_snake[1] - 1]])
+        elif direction == "RIGHT":
+            snake.body_snake.extend([[snake.pos_snake[0] - 1, snake.pos_snake[1]]])
+        elif direction == "LEFT":
+            snake.body_snake.extend([[snake.pos_snake[0] + 1, snake.pos_snake[1]]])
 
 class Game(object):
     def __init__ (self):
@@ -74,11 +86,12 @@ class Game(object):
         {LIGHT_BLUE_COLOR}Game_Grid:{WHITE_COLOR} {GAME_GRID}"""))
 
     def init_WINDOW(self, apple):
-        self.draw_game(apple)
+        WINDOW.fill(BLACK_RGB)
         if GAME_GRID:
             self.draw_game_grid()
         if DEBUG:
             snake.debug_snake(apple)
+        self.draw_game(apple)
         pygame.display.flip()
         
     def draw_game_grid(self):
@@ -88,9 +101,11 @@ class Game(object):
             pygame.draw.line(WINDOW, (SALTE_GREY_RGB), (GAME_WINDOW_POSX, y), [GAME_WINDOW_POSX_MAX, y])
 
     def draw_game(sefl, apple):
-        WINDOW.fill(BLACK_RGB)
         pygame.draw.rect(WINDOW, (WHITE_RGB), (GAME_WINDOW_POSX, GAME_WINDOW_POSY, GAME_WINDOW_LENGHT_X, GAME_WINDOW_LENGHT_Y), 2)
-        pygame.draw.rect(WINDOW, (GREEN_RGB), (snake.pos_snake[0], snake.pos_snake[1], snake.body_size, snake.body_size))
+        for i in range(0, apple.place + 1):
+            # print(i)
+            # print(snake.body_snake)
+            pygame.draw.rect(WINDOW, (GREEN_RGB), (snake.body_snake[i][0], snake.body_snake[i][1], snake.body_size, snake.body_size))
         WINDOW.blit(apple.apple_picture, apple.pos)
 
     def start_game(self, snake):
@@ -102,7 +117,7 @@ class Game(object):
             self.fps.tick(FPS)
             self.init_WINDOW(apple)
             direction = snake.get_event(direction)
-            if snake.eaten_apple(apple) == True:
+            if snake.eaten_apple(apple, direction) == True:
                 place += 1
                 apple = Apple(place)
             if direction == False:
@@ -115,6 +130,7 @@ class Apple(object):
         self.place = place
         self.apple_picture = self.apple_picture()
         self.pos = self.get_apple_pos()
+        # self.apple_picture.get_rect(center=(self.pos))
 
     def apple_picture(self):
         if self.id_apple == 0:
@@ -131,7 +147,8 @@ class Apple(object):
             return BLUE_APPLE
 
     def get_apple_pos(self):
-        return (random.randrange(10, SCREEN_RESOLUTION_X - 20, 10), random.randrange(10, SCREEN_RESOLUTION_Y - 20, 10))
+        return (random.randrange(GAME_WINDOW_POSX, GAME_WINDOW_POSX_MAX, CELL_SIZE),\
+             random.randrange(GAME_WINDOW_POSY, GAME_WINDOW_POSY_MAX, CELL_SIZE))
 
 
 if __name__ == "__main__":
