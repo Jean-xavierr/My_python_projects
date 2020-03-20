@@ -8,6 +8,7 @@ class Snake(object):
     def __init__(self, pos_snake):
         self.pos_snake = pos_snake
         self.body_snake = [pos_snake]
+        self.body_size = SIZE
         self.life = True
         self.score = 0
 
@@ -30,18 +31,18 @@ class Snake(object):
         return direction
 
     def move(self, direction):
-        if snake.pos_snake[0] < 6 or snake.pos_snake[0] > SCREEN_RESOLUTION_X - 16 \
-            or snake.pos_snake[1] < 6 or snake.pos_snake[1] > SCREEN_RESOLUTION_Y - 16:
+        if snake.pos_snake[0] < 10 or snake.pos_snake[0] > SCREEN_RESOLUTION_X - 20 \
+            or snake.pos_snake[1] < 10 or snake.pos_snake[1] > SCREEN_RESOLUTION_Y - 20:
                 time.sleep(50)
                 sys.exit()
         if direction == "UP":
-            snake.pos_snake[1] -= 1
+            snake.pos_snake[1] -= CELLULE_SIZE
         elif direction == "DOWN":
-            snake.pos_snake[1] += 1
+            snake.pos_snake[1] += CELLULE_SIZE
         elif direction == "RIGHT":
-            snake.pos_snake[0] += 1
+            snake.pos_snake[0] += CELLULE_SIZE
         elif direction == "LEFT":
-            snake.pos_snake[0] -= 1
+            snake.pos_snake[0] -= CELLULE_SIZE
         if direction == "STOP":
             snake.pos_snake = snake.pos_snake
     
@@ -50,8 +51,8 @@ class Snake(object):
         print(f"print snake pos {snake.pos_snake}")
         print(f"place apple {apple.place}")
         print(f"score {snake.score}")
-        if snake.pos_snake[0] >= apple.pos[0] - 8 and snake.pos_snake[0] <= apple.pos[0] + 8 \
-            and snake.pos_snake[1] >= apple.pos[1] - 8 and snake.pos_snake[1] <= apple.pos[1] + 8:
+        if snake.pos_snake[0] >= apple.pos[0] - 10 and snake.pos_snake[0] <= apple.pos[0] + 10 \
+            and snake.pos_snake[1] >= apple.pos[1] - 10 and snake.pos_snake[1] <= apple.pos[1] + 10:
             snake.score += apple.score
             return True
         return False
@@ -62,21 +63,33 @@ class Game(object):
         pygame.display.set_caption(GAME_TITLE)
         pygame.display.set_icon(APP_PICTURE)
 
-    def init_window(self, apple):
-        window = pygame.display.set_mode((SCREEN_RESOLUTION_X, SCREEN_RESOLUTION_Y))
-        window.fill(BLACK_RGB)
-        pygame.draw.rect(window, (WHITE_RGB), (0, 0, SCREEN_RESOLUTION_X, SCREEN_RESOLUTION_Y), 10)
-        pygame.draw.rect(window, (GREEN_RGB), (snake.pos_snake[0], snake.pos_snake[1], 10, 10))
-        window.blit(apple.apple_picture, apple.pos)
+    def init_WINDOW(self, apple):
+        WINDOW.fill(BLACK_RGB)
+        if GAME_GRID:
+            self.game_grid()
+        self.draw_snake_apple(apple)
         pygame.display.flip()
+    
+    def game_grid(self):
+        for x in range(CELLULE_SIZE, (SCREEN_RESOLUTION_X), CELLULE_SIZE):
+            pygame.draw.line(WINDOW, (112,128,144), (x, CELLULE_SIZE), [x, SCREEN_RESOLUTION_Y - 6])
+        for y in range(CELLULE_SIZE, (SCREEN_RESOLUTION_Y), CELLULE_SIZE):
+            pygame.draw.line(WINDOW, (112,128,144), (CELLULE_SIZE, y), [SCREEN_RESOLUTION_X - 6, y])
+
+    def draw_snake_apple(sefl, apple):
+        pygame.draw.rect(WINDOW, (WHITE_RGB), (0, 0, SCREEN_RESOLUTION_X, SCREEN_RESOLUTION_Y), 18)
+        pygame.draw.rect(WINDOW, (GREEN_RGB), (snake.pos_snake[0], snake.pos_snake[1], snake.body_size, snake.body_size))
+        WINDOW.blit(apple.apple_picture, apple.pos)
 
     def start_game(self, snake):
+        fps = pygame.time.Clock()
         start_game = True
         direction = ""
         place = 0
         apple = Apple(place)
         while start_game:
-            self.init_window(apple)
+            fps.tick(FPS)
+            self.init_WINDOW(apple)
             direction = snake.get_event(direction)
             if snake.eaten_apple(apple) == True:
                 place += 1
@@ -107,12 +120,17 @@ class Apple(object):
             return BLUE_APPLE
 
     def get_apple_pos(self):
-        return (random.randint(10, SCREEN_RESOLUTION_X - 20), random.randint(10, SCREEN_RESOLUTION_Y - 20))
+        return (random.randrange(10, SCREEN_RESOLUTION_X - 20, 10), random.randrange(10, SCREEN_RESOLUTION_Y - 20, 10))
 
 
 if __name__ == "__main__":
-    pygame.init()
-    game = Game()
-    snake = Snake([320, 240])
-    game.start_game(snake)
-    pygame.quit()
+    # if SCREEN_RESOLUTION_X % SIZE != 0 or SCREEN_RESOLUTION_Y % SIZE != 0:
+    #     print("Error: Size CELLULE")
+    #     sys.exit()
+    print(CELLULE_NB_X)
+    print(CELLULE_NB_Y)
+    # pygame.init()
+    # game = Game()
+    # snake = Snake([320, 240])
+    # game.start_game(snake)
+    # pygame.quit()
