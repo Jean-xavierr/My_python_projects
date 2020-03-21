@@ -55,11 +55,11 @@ class Snake(object):
     def get_event(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                sys.exit()
+                snake.life = False
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    sys.exit()
+                    snake.life = False
 
                 elif event.key == pygame.K_UP:
                     self.direction_x = 0
@@ -90,6 +90,11 @@ class Snake(object):
         self.body_snake.append(self.pos_snake)
         if len(self.body_snake) > self.grow_up:
             self.body_snake.pop(0)
+
+    def snake_bites_tail(self):
+        for body_snake in self.body_snake[:-1]:
+            if body_snake == self.body_snake[-1]:
+                self.life = False
 
     def eaten_apple(self, apple):
         if self.pos_snake[0] == apple.pos[0] and self.pos_snake[1] == apple.pos[1]:
@@ -127,6 +132,7 @@ class Game(object):
         for body_snake in snake.body_snake:
             pygame.draw.rect(WINDOW, (GREEN_RGB), (body_snake[0], body_snake[1], snake.body_size ,snake.body_size))
         WINDOW.blit(self.apple.picture, self.apple.pos)
+        self.draw_score(snake)
         pygame.display.flip()
 
     def draw_game_grid(self):
@@ -134,12 +140,18 @@ class Game(object):
             pygame.draw.line(WINDOW, (SALTE_GREY_RGB), (x, GAME_WINDOW_POSY), [x, GAME_WINDOW_POSY_MAX])
         for y in range(GAME_WINDOW_POSY, (GAME_WINDOW_LENGHT_Y + GAME_WINDOW_POSY), CELL_SIZE):
             pygame.draw.line(WINDOW, (SALTE_GREY_RGB), (GAME_WINDOW_POSX, y), [GAME_WINDOW_POSX_MAX, y])
+        
+    def draw_score(self, snake):
+        font = pygame.font.SysFont('Arial', int(CELL_SIZE * 1.2), True)
+        score_message = font.render(f"Score : {snake.score}", True, BLUE_RGB)
+        WINDOW.blit(score_message, (GAME_WINDOW_POSX, GAME_WINDOW_POSY / 2, CELL_SIZE, CELL_SIZE))
 
     def start_game(self, snake):
-        while True:
+        while snake.life:
             self.fps.tick(FPS)
             snake.get_event()
             snake.move()
+            snake.snake_bites_tail()
             if DEBUG:
                 self.debug_game()
             if snake.eaten_apple(self.apple):
@@ -152,4 +164,5 @@ if __name__ == "__main__":
     snake = Snake([SCREEN_RESOLUTION_X / 2, SCREEN_RESOLUTION_Y / 2])
     game = Game()
     game.start_game(snake)
+    print("FIN")
     pygame.quit()

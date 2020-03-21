@@ -31,6 +31,7 @@ GAME_GRID = True                                                # Activation of 
 # Color RGB Constants
 BLACK_RGB = pygame.Color(0, 0, 0)
 WHITE_RGB = pygame.Color(255, 255, 255)
+BLUE_RGB = pygame.Color(0, 190, 255)
 GREEN_RGB = pygame.Color(0, 255, 0)
 SALTE_GREY_RGB = pygame.Color(112,128,144)
 
