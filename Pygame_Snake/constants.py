@@ -7,7 +7,7 @@ by : https://github.com/Jean-xavierr
 import pygame
 
 # Game Constants | Window Constants
-FPS = 6
+FPS = 10
 DEBUG = True
 SCREEN_RESOLUTION_X = 640
 SCREEN_RESOLUTION_Y = 480
@@ -35,10 +35,11 @@ GREEN_RGB = pygame.Color(0, 255, 0)
 SALTE_GREY_RGB = pygame.Color(112,128,144)
 
 # Color Terminal ConstatsRED_COLOR = "\33[31m"
+RED_COLOR = "\31[32m"
 GREEN_COLOR = "\33[32m"
-# YELLOW_COLOR = "\33[33m"
-# BLUE_COLOR = "\33[34m"
-# PURPLE_COLOR = "\33[35m"
+YELLOW_COLOR = "\33[33m"
+BLUE_COLOR = "\33[34m"
+PURPLE_COLOR = "\33[35m"
 LIGHT_BLUE_COLOR = "\33[36m"
 WHITE_COLOR = "\33[37m"
 
