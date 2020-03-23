@@ -107,8 +107,11 @@ class Game(object):
     def __init__ (self):
         pygame.display.set_caption(GAME_TITLE)
         pygame.display.set_icon(APP_PICTURE)
-        self.place = 0
+        self.menu = True
+        self.in_progress = False
+        self.button = 0
         self.fps = pygame.time.Clock()
+        self.place = 0
         self.apple = Apple(self.place)
 
     def debug_game(self):
@@ -142,11 +145,101 @@ class Game(object):
             pygame.draw.line(WINDOW, (SALTE_GREY_RGB), (GAME_WINDOW_POSX, y), [GAME_WINDOW_POSX_MAX, y])
         
     def draw_score(self, snake):
-        font = pygame.font.SysFont('Arial', int(CELL_SIZE * 1.2), True)
-        score_message = font.render(f"Score : {snake.score}", True, BLUE_RGB)
+        score_message = self.font_message(CELL_SIZE * 1.2, f"Score : {snake.score}", BLUE_RGB)
         WINDOW.blit(score_message, (GAME_WINDOW_POSX, GAME_WINDOW_POSY / 2, CELL_SIZE, CELL_SIZE))
 
+    def font_message(self, size_police, text, color):
+        font = pygame.font.SysFont('Arial', int(size_police), True)
+        return (font.render(text, True, color))
+
+    def get_event_menu(self, game_menu):
+         for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    sys.exit()
+
+                elif event.key == pygame.K_RETURN:
+                    self.menu = False
+                    if game_menu:
+                        if self.button == 3:
+                            sys.exit()
+                        elif self.button == 1 or self.button == 2:
+                            self.in_progress = True
+                    else:
+                        if self.button == 0:
+                            self.menu = True
+                            self.in_progress = False
+                elif event.key == pygame.K_UP:
+                    if self.button > 0:
+                        self.button -= 1
+                elif event.key == pygame.K_DOWN:
+                    if game_menu:
+                        if self.button < 4:
+                            self.button += 1
+                    else:
+                        if self.button == 0:
+                            self.button += 1
+        
+    def index_button_menu(self):
+        if self.button == 0:
+            pygame.draw.rect(WINDOW, (YELLOW_RGB), (SCREEN_RESOLUTION_X / 2 - 152, SCREEN_RESOLUTION_Y / 3 - 2, 305, 35), 1)
+        if self.button == 1:
+            pygame.draw.rect(WINDOW, (YELLOW_RGB), (SCREEN_RESOLUTION_X / 2 - 152, SCREEN_RESOLUTION_Y / 3 + 50 -2, 305, 35), 1)
+        if self.button == 2:
+            pygame.draw.rect(WINDOW, (YELLOW_RGB), (SCREEN_RESOLUTION_X / 2 - 77, SCREEN_RESOLUTION_Y / 3 + 100 - 2, 155, 35), 1)
+        if self.button == 3:
+            pygame.draw.rect(WINDOW, (YELLOW_RGB), (SCREEN_RESOLUTION_X / 2 - 152, SCREEN_RESOLUTION_Y / 3 + 150 -2, 305, 35), 1)
+        if self.button == 4:
+            pygame.draw.rect(WINDOW, (YELLOW_RGB), (SCREEN_RESOLUTION_X - 62, SCREEN_RESOLUTION_Y - 52, 35, 35), 1)
+
+    def index_button_in_progress(self):
+        if self.button == 0:
+            pygame.draw.rect(WINDOW, (YELLOW_RGB), (SCREEN_RESOLUTION_X / 2 - 152, SCREEN_RESOLUTION_Y / 2 + 50 - 2, 305, 35), 1)
+        if self.button == 1:
+            pygame.draw.rect(WINDOW, (YELLOW_RGB), (SCREEN_RESOLUTION_X / 2 - 17, SCREEN_RESOLUTION_Y / 2 + 98, 35, 35), 1)
+
+    def draw_game_menu(self):
+        WINDOW.blit(BACKGROUND, (0, 0, SCREEN_RESOLUTION_X, SCREEN_RESOLUTION_Y))
+        menu_message = self.font_message(CELL_SIZE * 2, f"Snake Game", GREEN_RGB)
+        WINDOW.blit(menu_message, (GAME_WINDOW_POSX, GAME_WINDOW_POSY / 4))
+        WINDOW.blit(BUTTON_1P, (SCREEN_RESOLUTION_X / 2 - 150, SCREEN_RESOLUTION_Y / 3))
+        WINDOW.blit(BUTTON_2P, (SCREEN_RESOLUTION_X / 2 - 150, SCREEN_RESOLUTION_Y / 3 + 50))
+        WINDOW.blit(BUTTON_STATS, (SCREEN_RESOLUTION_X / 2 - 75, SCREEN_RESOLUTION_Y / 3 + 100))
+        WINDOW.blit(BUTTON_QUIT, (SCREEN_RESOLUTION_X / 2 - 150, SCREEN_RESOLUTION_Y / 3 + 150))
+        WINDOW.blit(BUTTON_INFO, (SCREEN_RESOLUTION_X - 60, SCREEN_RESOLUTION_Y - 50))
+
+    def draw_game_in_progress(self):
+        in_progress_window = pygame.display.set_mode((SCREEN_RESOLUTION_X, SCREEN_RESOLUTION_Y))
+        in_progress_window.blit(BACKGROUND, (0, 0, SCREEN_RESOLUTION_X, SCREEN_RESOLUTION_Y))
+        in_progress_message = self.font_message(CELL_SIZE, "This feature is in production, coming soon.", YELLOW_RGB)
+        in_progress_window.blit(GAME_TOY, (SCREEN_RESOLUTION_X / 2 - 50 , SCREEN_RESOLUTION_Y / 4))
+        in_progress_window.blit(in_progress_message, (SCREEN_RESOLUTION_X / 2 - 200, SCREEN_RESOLUTION_Y / 2))
+        in_progress_window.blit(BUTTON_BACK, (SCREEN_RESOLUTION_X / 2 - 150 , SCREEN_RESOLUTION_Y / 2 + 50))
+        in_progress_window.blit(BUTTON_INFO, (SCREEN_RESOLUTION_X / 2 - 15, SCREEN_RESOLUTION_Y / 2 + 100))
+
     def start_game(self, snake):
+        while self.menu:
+            pygame.time.Clock().tick(5)
+            self.get_event_menu(True)
+            self.draw_game_menu()
+            self.index_button_menu()
+            pygame.display.flip()
+            if not self.menu:
+                self.button = 0
+
+        while self.in_progress:
+            pygame.time.Clock().tick(5)
+            self.get_event_menu(False)
+            self.draw_game_in_progress()
+            self.index_button_in_progress()
+            pygame.display.flip()
+            if not self.in_progress:
+                return
+
+
         while snake.life:
             self.fps.tick(FPS)
             snake.get_event()
@@ -164,5 +257,7 @@ if __name__ == "__main__":
     snake = Snake([SCREEN_RESOLUTION_X / 2, SCREEN_RESOLUTION_Y / 2])
     game = Game()
     game.start_game(snake)
+    while game.menu:
+        game.start_game(snake)
     print("FIN")
     pygame.quit()
