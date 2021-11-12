@@ -1,0 +1,46 @@
+Projet: mini_paint
+-------------------------------------------------------------------------------
+
+Ecrire un programme qui prendra en parametre un "fichier d'operations" et affichera le resultat dans le terminal
+
+Votre programme ne prendra qu'un seul argument, ce sera le chemin vers le "fichier d'operations"
+Si votre programme recoit 0 ou plus de 1 argument il devra afficher "Error: argument"
+
+
+$> python mini_paint.py
+Error: argument
+$> python mini_paint.py lot of arguments
+Error: argument
+$> 
+
+Si votre programme rencontre un probleme quand il ouvre ou bien lit le "fichier d'operation", il devra écrire "Error: Operation file corrupted"
+
+Le "fichier d'operation" sera composé d'une opération par ligne
+Si une ligne n'est pas correct, alors c'est qu'un probleme vient d'avoir lieu
+Si votre programme à un probleme il doit renvoyer "Error: parsing"
+Les lignes doivent etre lu dans l'ordre et par consequent les operations doivent etre executer dans le meme ordre
+Il doit n'y avoir qu'un espace entre chaque variable d'une ligne
+
+WIDTH HEIGHT BACKGROUND_CHAR
+Cette ligne sera toujours la premiere ligne du fichier et elle definie la zone dites "de dessin". Votre programme ne devrait rien afficher en dehors de cette "zone de dessin". Cette ligne ne sera presente qu une fois.
+- WIDTH: doit etre un int tel que 0 < WIDTH <= 300, C'est le nombre de caractères horizontaux utilisés pour la zone de dessin
+- HEIGHT: doit etre un int tel que 0 < HEIGHT <= 300, C'est le nombre de caractères verticaux utilisés pour la zone de dessin
+- BACKGROUND_CHAR: Par defaut toutes la "zone de dessin" est rempli avec BACKGROUND_CHAR
+
+r X Y WIDTH HEIGHT CHAR
+Cette operation fera dessiné un rectangle vide, ou seulement la bordure du rectangle est dessinée
+- r: le caractère r
+- X: un nombre, la position horizontale du coin en haut a gauche du rectangle
+- Y: un nombre, la position verticale du coin en haut a gauche du rectangle
+- WIDTH: un nombre positif different de 0, la largeur du rectangle (horizontale)
+- HEIGHT: un nombre positif different de 0, la hauteur du rectangle (verticale)
+- CHAR: un char, le caractère utilisé pour dessiner le rectangle
+
+R X Y WIDTH HEIGHT CHAR
+Cette operation fera dessiné un rectangle plein
+- R: le caractère R
+- X: un nombre, la position horizontale du coin en haut a gauche du rectangle
+- Y: un nombre, la position verticale du coin en haut a gauche du rectangle
+- WIDTH: un nombre positif different de 0, la largeur du rectangle (horizontale)
+- HEIGHT: un nombre positif different de 0, la hauteur du rectangle (verticale)
+- CHAR: un char, le caractère utilisé pour dessiner le rectangle
